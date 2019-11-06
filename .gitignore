@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+*.log
+dist/
+.DS_Store
+.vscode/
+.rpt2_cache/
+.idea
+types
