@@ -1,5 +1,5 @@
 export interface IRenderer {
-  render(renderableList: IRenderable[]);
+	render(renderableList: IRenderable[]): void
 }
 
 export interface IRenderable {}

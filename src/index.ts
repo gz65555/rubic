@@ -1,5 +1,5 @@
-// const hello = "gggg";
+const hello = 'gggg'
 
 export function call(): void {
-  // console.log(hello);
+	console.log(hello)
 }

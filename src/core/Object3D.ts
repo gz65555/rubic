@@ -1,3 +1,1 @@
-class Object3D {
-
-}
+class Object3D {}
