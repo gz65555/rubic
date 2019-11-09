@@ -53,5 +53,8 @@
   "ci": {
     "type": "gitlab",
     "version": "alinode=3.11.7"
+  },
+  "dependencies": {
+    "event-emitter3": "^1.0.4"
   }
 }
