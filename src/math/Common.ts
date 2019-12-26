@@ -1,3 +1,3 @@
 export class Common {
-	public static readonly EPSILON = 0.000001
+  public static readonly EPSILON = 0.000001;
 }

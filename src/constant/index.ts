@@ -1,1 +1,1 @@
-export * from "./gl-constant"
+export * from "./gl-constant";

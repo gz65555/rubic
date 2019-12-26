@@ -1,4 +1,9 @@
-import {compileProgram, extractAttributes, extractUniforms, generateUniformAccessObject} from "@/renderer/webgl/utils";
+import {
+  compileProgram,
+  extractAttributes,
+  extractUniforms,
+  generateUniformAccessObject,
+} from "@/renderer/webgl/utils";
 
 export class GLProgram {
   private program: WebGLProgram;
