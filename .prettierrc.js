@@ -7,5 +7,5 @@ module.exports =  {
   "jsxBracketSameLine": true,
   "insertPragma": false,
   "tabWidth": 2,
-  "useTabs": true
+  "useTabs": false
 };
