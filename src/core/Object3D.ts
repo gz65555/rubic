@@ -1,1 +1,3 @@
-class Object3D {}
+export class Object3D {
+	updateWorldTransform() {}
+}

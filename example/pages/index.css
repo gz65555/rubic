@@ -2,3 +2,8 @@
 .normal {
   background: #F2E679;
 }
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+}
