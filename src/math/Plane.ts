@@ -36,10 +36,10 @@ export class Plane {
 		var x2: number = point2.x - point0.x;
 		var y2: number = point2.y - point0.y;
 		var z2: number = point2.z - point0.z;
-		var yz: number = (y1 * z2) - (z1 * y2);
-		var xz: number = (z1 * x2) - (x1 * z2);
-		var xy: number = (x1 * y2) - (y1 * x2);
-		var invPyth: number = 1.0 / (Math.sqrt((yz * yz) + (xz * xz) + (xy * xy)));
+		var yz: number = y1 * z2 - z1 * y2;
+		var xz: number = z1 * x2 - x1 * z2;
+		var xy: number = x1 * y2 - y1 * x2;
+		var invPyth: number = 1.0 / Math.sqrt(yz * yz + xz * xz + xy * xy);
 
 		var x: number = yz * invPyth;
 		var y: number = xz * invPyth;
@@ -50,7 +50,7 @@ export class Plane {
 		normal.y = y;
 		normal.z = z;
 
-		out.distance = -((x * point0.x) + (y * point0.y) + (z * point0.z));
+		out.distance = -(x * point0.x + y * point0.y + z * point0.z);
 	}
 
 	/**
@@ -88,8 +88,4 @@ export class Plane {
 		this.cloneTo(dest);
 		return dest;
 	}
-
 }
-
-
-

@@ -1,7 +1,7 @@
 import { Vector3 } from "./Vector3";
 /**
-	 * <code>Ray</code> 类用于创建射线。
-	 */
+ * <code>Ray</code> 类用于创建射线。
+ */
 export class Ray {
 	/**原点*/
 	origin: Vector3;
@@ -18,4 +18,3 @@ export class Ray {
 		this.direction = direction;
 	}
 }
-

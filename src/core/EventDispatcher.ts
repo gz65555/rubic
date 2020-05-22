@@ -40,9 +40,9 @@ export class EventDispatcher {
 		listeners.splice(index, 1);
 		// 空数组时删除
 		listeners.length === 0 && delete this.listeners[eventName];
-  };
-  
-  public readonly off = this.removeEventListener;
+	};
+
+	public readonly off = this.removeEventListener;
 
 	public readonly removeAll = (eventName?: string) => {
 		if (!eventName) {

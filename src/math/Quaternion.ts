@@ -2,7 +2,7 @@ import { Vector3 } from "./Vector3";
 import { Matrix4 } from "./Matrix4x4";
 import { MathUtils3D } from "./MathUtils3D";
 import { Vector2 } from "./Vector2";
-import { IClone } from "../core/IClone"
+import { IClone } from "../core/IClone";
 import { Matrix3 } from "./Matrix3x3";
 
 /**
@@ -22,10 +22,9 @@ export class Quaternion implements IClone {
 	static _tempMatrix3x3: Matrix3 = new Matrix3();
 
 	/**默认矩阵,禁止修改*/
-	static DEFAULT: Quaternion =/*[STATIC SAFE]*/ new Quaternion();
+	static DEFAULT: Quaternion = /*[STATIC SAFE]*/ new Quaternion();
 	/**无效矩阵,禁止修改*/
 	static NAN: Quaternion = new Quaternion(NaN, NaN, NaN, NaN);
-
 
 	/**
 	 *  从欧拉角生成四元数（顺序为Yaw、Pitch、Roll）
@@ -46,11 +45,10 @@ export class Quaternion implements IClone {
 		var sinYaw: number = Math.sin(halfYaw);
 		var cosYaw: number = Math.cos(halfYaw);
 
-
-		out.x = (cosYaw * sinPitch * cosRoll) + (sinYaw * cosPitch * sinRoll);
-		out.y = (sinYaw * cosPitch * cosRoll) - (cosYaw * sinPitch * sinRoll);
-		out.z = (cosYaw * cosPitch * sinRoll) - (sinYaw * sinPitch * cosRoll);
-		out.w = (cosYaw * cosPitch * cosRoll) + (sinYaw * sinPitch * sinRoll);
+		out.x = cosYaw * sinPitch * cosRoll + sinYaw * cosPitch * sinRoll;
+		out.y = sinYaw * cosPitch * cosRoll - cosYaw * sinPitch * sinRoll;
+		out.z = cosYaw * cosPitch * sinRoll - sinYaw * sinPitch * cosRoll;
+		out.w = cosYaw * cosPitch * cosRoll + sinYaw * sinPitch * sinRoll;
 	}
 
 	/**
@@ -68,27 +66,24 @@ export class Quaternion implements IClone {
 		var ry: number = right.y;
 		var rz: number = right.z;
 		var rw: number = right.w;
-		var a: number = (ly * rz - lz * ry);
-		var b: number = (lz * rx - lx * rz);
-		var c: number = (lx * ry - ly * rx);
-		var d: number = (lx * rx + ly * ry + lz * rz);
-		out.x = (lx * rw + rx * lw) + a;
-		out.y = (ly * rw + ry * lw) + b;
-		out.z = (lz * rw + rz * lw) + c;
+		var a: number = ly * rz - lz * ry;
+		var b: number = lz * rx - lx * rz;
+		var c: number = lx * ry - ly * rx;
+		var d: number = lx * rx + ly * ry + lz * rz;
+		out.x = lx * rw + rx * lw + a;
+		out.y = ly * rw + ry * lw + b;
+		out.z = lz * rw + rz * lw + c;
 		out.w = lw * rw - d;
 	}
 
 	private static arcTanAngle(x: number, y: number): number {
 		if (x == 0) {
-			if (y == 1)
-				return Math.PI / 2;
+			if (y == 1) return Math.PI / 2;
 			return -Math.PI / 2;
 		}
-		if (x > 0)
-			return Math.atan(y / x);
+		if (x > 0) return Math.atan(y / x);
 		if (x < 0) {
-			if (y > 0)
-				return Math.atan(y / x) + Math.PI;
+			if (y > 0) return Math.atan(y / x) + Math.PI;
 			return Math.atan(y / x) - Math.PI;
 		}
 		return 0;
@@ -117,7 +112,6 @@ export class Quaternion implements IClone {
 		out.w = Math.cos(rad);
 	}
 
-
 	/**
 	 *  从旋转矩阵计算四元数
 	 * @param	mat 旋转矩阵
@@ -138,7 +132,7 @@ export class Quaternion implements IClone {
 			out.x = (me[6] - me[9]) * sqrt;
 			out.y = (me[8] - me[2]) * sqrt;
 			out.z = (me[1] - me[4]) * sqrt;
-		} else if ((me[0] >= me[5]) && (me[0] >= me[10])) {
+		} else if (me[0] >= me[5] && me[0] >= me[10]) {
 			sqrt = Math.sqrt(1.0 + me[0] - me[5] - me[10]);
 			half = 0.5 / sqrt;
 
@@ -163,7 +157,6 @@ export class Quaternion implements IClone {
 			out.z = 0.5 * sqrt;
 			out.w = (me[1] - me[4]) * half;
 		}
-
 	}
 
 	/**
@@ -175,13 +168,20 @@ export class Quaternion implements IClone {
 	 * @returns 输出Float32Array
 	 */
 	static slerp(left: Quaternion, right: Quaternion, t: number, out: Quaternion): Quaternion {
-		var ax: number = left.x, ay: number = left.y, az: number = left.z, aw: number = left.w, bx: number = right.x, by: number = right.y, bz: number = right.z, bw: number = right.w;
+		var ax: number = left.x,
+			ay: number = left.y,
+			az: number = left.z,
+			aw: number = left.w,
+			bx: number = right.x,
+			by: number = right.y,
+			bz: number = right.z,
+			bw: number = right.w;
 
 		var omega: number, cosom: number, sinom: number, scale0: number, scale1: number;
 
-		// calc cosine 
+		// calc cosine
 		cosom = ax * bx + ay * by + az * bz + aw * bw;
-		// adjust signs (if necessary) 
+		// adjust signs (if necessary)
 		if (cosom < 0.0) {
 			cosom = -cosom;
 			bx = -bx;
@@ -189,20 +189,20 @@ export class Quaternion implements IClone {
 			bz = -bz;
 			bw = -bw;
 		}
-		// calculate coefficients 
-		if ((1.0 - cosom) > 0.000001) {
-			// standard case (slerp) 
+		// calculate coefficients
+		if (1.0 - cosom > 0.000001) {
+			// standard case (slerp)
 			omega = Math.acos(cosom);
 			sinom = Math.sin(omega);
 			scale0 = Math.sin((1.0 - t) * omega) / sinom;
 			scale1 = Math.sin(t * omega) / sinom;
 		} else {
-			// "from" and "to" quaternions are very close  
-			//  ... so we can do a linear interpolation 
+			// "from" and "to" quaternions are very close
+			//  ... so we can do a linear interpolation
 			scale0 = 1.0 - t;
 			scale1 = t;
 		}
-		// calculate final values 
+		// calculate final values
 		out.x = scale0 * ax + scale1 * bx;
 		out.y = scale0 * ay + scale1 * by;
 		out.z = scale0 * az + scale1 * bz;
@@ -221,15 +221,15 @@ export class Quaternion implements IClone {
 	static lerp(left: Quaternion, right: Quaternion, amount: number, out: Quaternion): void {
 		var inverse: number = 1.0 - amount;
 		if (Quaternion.dot(left, right) >= 0) {
-			out.x = (inverse * left.x) + (amount * right.x);
-			out.y = (inverse * left.y) + (amount * right.y);
-			out.z = (inverse * left.z) + (amount * right.z);
-			out.w = (inverse * left.w) + (amount * right.w);
+			out.x = inverse * left.x + amount * right.x;
+			out.y = inverse * left.y + amount * right.y;
+			out.z = inverse * left.z + amount * right.z;
+			out.w = inverse * left.w + amount * right.w;
 		} else {
-			out.x = (inverse * left.x) - (amount * right.x);
-			out.y = (inverse * left.y) - (amount * right.y);
-			out.z = (inverse * left.z) - (amount * right.z);
-			out.w = (inverse * left.w) - (amount * right.w);
+			out.x = inverse * left.x - amount * right.x;
+			out.y = inverse * left.y - amount * right.y;
+			out.z = inverse * left.z - amount * right.z;
+			out.w = inverse * left.w - amount * right.w;
 		}
 		out.normalize(out);
 	}
@@ -273,7 +273,13 @@ export class Quaternion implements IClone {
 	 * @param	z 四元数的z值
 	 * @param	w 四元数的w值
 	 */
-	constructor(x: number = 0, y: number = 0, z: number = 0, w: number = 1, nativeElements: Float32Array = null/*[NATIVE]*/) {
+	constructor(
+		x: number = 0,
+		y: number = 0,
+		z: number = 0,
+		w: number = 1,
+		nativeElements: Float32Array = null /*[NATIVE]*/,
+	) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -323,7 +329,8 @@ export class Quaternion implements IClone {
 	rotateX(rad: number, out: Quaternion): void {
 		rad *= 0.5;
 
-		var bx: number = Math.sin(rad), bw: number = Math.cos(rad);
+		var bx: number = Math.sin(rad),
+			bw: number = Math.cos(rad);
 
 		out.x = this.x * bw + this.w * bx;
 		out.y = this.y * bw + this.z * bx;
@@ -339,7 +346,8 @@ export class Quaternion implements IClone {
 	rotateY(rad: number, out: Quaternion): void {
 		rad *= 0.5;
 
-		var by: number = Math.sin(rad), bw: number = Math.cos(rad);
+		var by: number = Math.sin(rad),
+			bw: number = Math.cos(rad);
 
 		out.x = this.x * bw - this.z * by;
 		out.y = this.y * bw + this.w * by;
@@ -354,7 +362,8 @@ export class Quaternion implements IClone {
 	 */
 	rotateZ(rad: number, out: Quaternion): void {
 		rad *= 0.5;
-		var bz: number = Math.sin(rad), bw: number = Math.cos(rad);
+		var bz: number = Math.sin(rad),
+			bw: number = Math.cos(rad);
 
 		out.x = this.x * bw + this.y * bz;
 		out.y = this.y * bw - this.x * bz;
@@ -368,13 +377,12 @@ export class Quaternion implements IClone {
 	 * @param	out 欧拉角值
 	 */
 	getYawPitchRoll(out: Vector3): void {
+		Vector3.transformQuat(Vector3._ForwardRH, this, Quaternion.TEMPVector31 /*forwarldRH*/);
 
-		Vector3.transformQuat(Vector3._ForwardRH, this, Quaternion.TEMPVector31/*forwarldRH*/);
-
-		Vector3.transformQuat(Vector3._Up, this, Quaternion.TEMPVector32/*up*/);
+		Vector3.transformQuat(Vector3._Up, this, Quaternion.TEMPVector32 /*up*/);
 		var upe: Vector3 = Quaternion.TEMPVector32;
 
-		Quaternion.angleTo(Vector3._ZERO, Quaternion.TEMPVector31, Quaternion.TEMPVector33/*angle*/);
+		Quaternion.angleTo(Vector3._ZERO, Quaternion.TEMPVector31, Quaternion.TEMPVector33 /*angle*/);
 		var angle: Vector3 = Quaternion.TEMPVector33;
 
 		if (angle.x == Math.PI / 2) {
@@ -393,10 +401,8 @@ export class Quaternion implements IClone {
 		}
 
 		// Special cases.
-		if (angle.y <= -Math.PI)
-			angle.y = Math.PI;
-		if (angle.z <= -Math.PI)
-			angle.z = Math.PI;
+		if (angle.y <= -Math.PI) angle.y = Math.PI;
+		if (angle.z <= -Math.PI) angle.z = Math.PI;
 
 		if (angle.y >= Math.PI && angle.z >= Math.PI) {
 			angle.y = 0;
@@ -415,7 +421,10 @@ export class Quaternion implements IClone {
 	 * @param	out  输出四元数
 	 */
 	invert(out: Quaternion): void {
-		var a0: number = this.x, a1: number = this.y, a2: number = this.z, a3: number = this.w;
+		var a0: number = this.x,
+			a1: number = this.y,
+			a2: number = this.z,
+			a3: number = this.w;
 		var dot: number = a0 * a0 + a1 * a1 + a2 * a2 + a3 * a3;
 		var invDot: number = dot ? 1.0 / dot : 0;
 
@@ -474,7 +483,12 @@ export class Quaternion implements IClone {
 	}
 
 	equals(b: Quaternion): boolean {
-		return MathUtils3D.nearEqual(this.x, b.x) && MathUtils3D.nearEqual(this.y, b.y) && MathUtils3D.nearEqual(this.z, b.z) && MathUtils3D.nearEqual(this.w, b.w);
+		return (
+			MathUtils3D.nearEqual(this.x, b.x) &&
+			MathUtils3D.nearEqual(this.y, b.y) &&
+			MathUtils3D.nearEqual(this.z, b.z) &&
+			MathUtils3D.nearEqual(this.w, b.w)
+		);
 	}
 
 	/**
@@ -504,7 +518,7 @@ export class Quaternion implements IClone {
 	 * @return 长度的平方。
 	 */
 	lengthSquared(): number {
-		return (this.x * this.x) + (this.y * this.y) + (this.z * this.z) + (this.w * this.w);
+		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
 	}
 
 	/**
@@ -545,7 +559,6 @@ export class Quaternion implements IClone {
 		var scale: number = m11 + m22 + m33;
 
 		if (scale > 0) {
-
 			sqrt = Math.sqrt(scale + 1);
 			out.w = sqrt * 0.5;
 			sqrt = 0.5 / sqrt;
@@ -553,9 +566,7 @@ export class Quaternion implements IClone {
 			out.x = (m23 - m32) * sqrt;
 			out.y = (m31 - m13) * sqrt;
 			out.z = (m12 - m21) * sqrt;
-
-		} else if ((m11 >= m22) && (m11 >= m33)) {
-
+		} else if (m11 >= m22 && m11 >= m33) {
 			sqrt = Math.sqrt(1 + m11 - m22 - m33);
 			half = 0.5 / sqrt;
 
@@ -564,7 +575,6 @@ export class Quaternion implements IClone {
 			out.z = (m13 + m31) * half;
 			out.w = (m23 - m32) * half;
 		} else if (m22 > m33) {
-
 			sqrt = Math.sqrt(1 + m22 - m11 - m33);
 			half = 0.5 / sqrt;
 
@@ -573,7 +583,6 @@ export class Quaternion implements IClone {
 			out.z = (m32 + m23) * half;
 			out.w = (m31 - m13) * half;
 		} else {
-
 			sqrt = Math.sqrt(1 + m33 - m11 - m22);
 			half = 0.5 / sqrt;
 
@@ -584,25 +593,20 @@ export class Quaternion implements IClone {
 		}
 	}
 
-	forNativeElement(nativeElements: Float32Array = null): void//[NATIVE_TS]
-	{
-
+	forNativeElement(nativeElements: Float32Array = null): void {
+		//[NATIVE_TS]
 		if (nativeElements) {
 			(<any>this).elements = nativeElements;
 			(<any>this).elements[0] = this.x;
 			(<any>this).elements[1] = this.y;
 			(<any>this).elements[2] = this.z;
 			(<any>this).elements[3] = this.w;
-		}
-		else {
+		} else {
 			(<any>this).elements = new Float32Array([this.x, this.y, this.z, this.w]);
 		}
 		Vector2.rewriteNumProperty(this, "x", 0);
 		Vector2.rewriteNumProperty(this, "y", 1);
 		Vector2.rewriteNumProperty(this, "z", 2);
 		Vector2.rewriteNumProperty(this, "w", 3);
-
 	}
 }
-
-

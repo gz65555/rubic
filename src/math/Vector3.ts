@@ -3,7 +3,7 @@ import { Quaternion } from "./Quaternion";
 import { Matrix4 } from "./Matrix4x4";
 import { MathUtils3D } from "./MathUtils3D";
 import { Vector2 } from "./Vector2";
-import { IClone } from "../core/IClone"
+import { IClone } from "../core/IClone";
 /**
  * <code>Vector3</code> 类用于创建三维向量。
  */
@@ -40,7 +40,7 @@ export class Vector3 implements IClone {
 		var x: number = value1.x - value2.x;
 		var y: number = value1.y - value2.y;
 		var z: number = value1.z - value2.z;
-		return (x * x) + (y * y) + (z * z);
+		return x * x + y * y + z * z;
 	}
 
 	/**
@@ -53,7 +53,7 @@ export class Vector3 implements IClone {
 		var x: number = value1.x - value2.x;
 		var y: number = value1.y - value2.y;
 		var z: number = value1.z - value2.z;
-		return Math.sqrt((x * x) + (y * y) + (z * z));
+		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 	/**
@@ -87,9 +87,17 @@ export class Vector3 implements IClone {
 	 * @param	out 输出三维向量。
 	 */
 	static transformQuat(source: Vector3, rotation: Quaternion, out: Vector3): void {
-		var x: number = source.x, y: number = source.y, z: number = source.z, qx: number = rotation.x, qy: number = rotation.y, qz: number = rotation.z, qw: number = rotation.w,
-
-			ix: number = qw * x + qy * z - qz * y, iy: number = qw * y + qz * x - qx * z, iz: number = qw * z + qx * y - qy * x, iw: number = -qx * x - qy * y - qz * z;
+		var x: number = source.x,
+			y: number = source.y,
+			z: number = source.z,
+			qx: number = rotation.x,
+			qy: number = rotation.y,
+			qz: number = rotation.z,
+			qw: number = rotation.w,
+			ix: number = qw * x + qy * z - qz * y,
+			iy: number = qw * y + qz * x - qx * z,
+			iz: number = qw * z + qx * y - qy * x,
+			iw: number = -qx * x - qy * y - qz * z;
 
 		out.x = ix * qw + iw * -qx + iy * -qz - iz * -qy;
 		out.y = iy * qw + iw * -qy + iz * -qx - ix * -qz;
@@ -102,7 +110,9 @@ export class Vector3 implements IClone {
 	 * @return 标量长度。
 	 */
 	static scalarLength(a: Vector3): number {
-		var x: number = a.x, y: number = a.y, z: number = a.z;
+		var x: number = a.x,
+			y: number = a.y,
+			z: number = a.z;
 		return Math.sqrt(x * x + y * y + z * z);
 	}
 
@@ -112,7 +122,9 @@ export class Vector3 implements IClone {
 	 * @return 标量长度的平方。
 	 */
 	static scalarLengthSquared(a: Vector3): number {
-		var x: number = a.x, y: number = a.y, z: number = a.z;
+		var x: number = a.x,
+			y: number = a.y,
+			z: number = a.z;
 		return x * x + y * y + z * z;
 	}
 
@@ -122,7 +134,9 @@ export class Vector3 implements IClone {
 	 * @param	out 输出三维向量。
 	 */
 	static normalize(s: Vector3, out: Vector3): void {
-		var x: number = s.x, y: number = s.y, z: number = s.z;
+		var x: number = s.x,
+			y: number = s.y,
+			z: number = s.z;
 		var len: number = x * x + y * y + z * z;
 		if (len > 0) {
 			len = 1 / Math.sqrt(len);
@@ -164,7 +178,9 @@ export class Vector3 implements IClone {
 	 * @param	out 输出向量。
 	 */
 	static lerp(a: Vector3, b: Vector3, t: number, out: Vector3): void {
-		var ax: number = a.x, ay: number = a.y, az: number = a.z;
+		var ax: number = a.x,
+			ay: number = a.y,
+			az: number = a.z;
 		out.x = ax + t * (b.x - ax);
 		out.y = ay + t * (b.y - ay);
 		out.z = az + t * (b.z - az);
@@ -196,10 +212,12 @@ export class Vector3 implements IClone {
 		var vectorZ: number = vector.z;
 
 		var transformElem: Float32Array = transform.elements;
-		result.x = (vectorX * transformElem[0]) + (vectorY * transformElem[4]) + (vectorZ * transformElem[8]) + transformElem[12];
-		result.y = (vectorX * transformElem[1]) + (vectorY * transformElem[5]) + (vectorZ * transformElem[9]) + transformElem[13];
-		result.z = (vectorX * transformElem[2]) + (vectorY * transformElem[6]) + (vectorZ * transformElem[10]) + transformElem[14];
-		result.w = (vectorX * transformElem[3]) + (vectorY * transformElem[7]) + (vectorZ * transformElem[11]) + transformElem[15];
+		result.x = vectorX * transformElem[0] + vectorY * transformElem[4] + vectorZ * transformElem[8] + transformElem[12];
+		result.y = vectorX * transformElem[1] + vectorY * transformElem[5] + vectorZ * transformElem[9] + transformElem[13];
+		result.z =
+			vectorX * transformElem[2] + vectorY * transformElem[6] + vectorZ * transformElem[10] + transformElem[14];
+		result.w =
+			vectorX * transformElem[3] + vectorY * transformElem[7] + vectorZ * transformElem[11] + transformElem[15];
 	}
 
 	/**
@@ -214,9 +232,9 @@ export class Vector3 implements IClone {
 		var normalZ: number = normal.z;
 
 		var transformElem: Float32Array = transform.elements;
-		result.x = (normalX * transformElem[0]) + (normalY * transformElem[4]) + (normalZ * transformElem[8]);
-		result.y = (normalX * transformElem[1]) + (normalY * transformElem[5]) + (normalZ * transformElem[9]);
-		result.z = (normalX * transformElem[2]) + (normalY * transformElem[6]) + (normalZ * transformElem[10]);
+		result.x = normalX * transformElem[0] + normalY * transformElem[4] + normalZ * transformElem[8];
+		result.y = normalX * transformElem[1] + normalY * transformElem[5] + normalZ * transformElem[9];
+		result.z = normalX * transformElem[2] + normalY * transformElem[6] + normalZ * transformElem[10];
 	}
 
 	/**
@@ -231,10 +249,29 @@ export class Vector3 implements IClone {
 		var coordinateZ: number = coordinate.z;
 
 		var transformElem: Float32Array = transform.elements;
-		var w: number = coordinateX * transformElem[3] + coordinateY * transformElem[7] + coordinateZ * transformElem[11] + transformElem[15];
-		result.x = (coordinateX * transformElem[0] + coordinateY * transformElem[4] + coordinateZ * transformElem[8] + transformElem[12]) / w;
-		result.y = (coordinateX * transformElem[1] + coordinateY * transformElem[5] + coordinateZ * transformElem[9] + transformElem[13]) / w;
-		result.z = (coordinateX * transformElem[2] + coordinateY * transformElem[6] + coordinateZ * transformElem[10] + transformElem[14]) / w;
+		var w: number =
+			coordinateX * transformElem[3] +
+			coordinateY * transformElem[7] +
+			coordinateZ * transformElem[11] +
+			transformElem[15];
+		result.x =
+			(coordinateX * transformElem[0] +
+				coordinateY * transformElem[4] +
+				coordinateZ * transformElem[8] +
+				transformElem[12]) /
+			w;
+		result.y =
+			(coordinateX * transformElem[1] +
+				coordinateY * transformElem[5] +
+				coordinateZ * transformElem[9] +
+				transformElem[13]) /
+			w;
+		result.z =
+			(coordinateX * transformElem[2] +
+				coordinateY * transformElem[6] +
+				coordinateZ * transformElem[10] +
+				transformElem[14]) /
+			w;
 	}
 
 	/**
@@ -257,14 +294,14 @@ export class Vector3 implements IClone {
 		var maxeY: number = max.y;
 		var maxeZ: number = max.z;
 
-		x = (x > maxeX) ? maxeX : x;
-		x = (x < mineX) ? mineX : x;
+		x = x > maxeX ? maxeX : x;
+		x = x < mineX ? mineX : x;
 
-		y = (y > maxeY) ? maxeY : y;
-		y = (y < mineY) ? mineY : y;
+		y = y > maxeY ? maxeY : y;
+		y = y < mineY ? mineY : y;
 
-		z = (z > maxeZ) ? maxeZ : z;
-		z = (z < mineZ) ? mineZ : z;
+		z = z > maxeZ ? maxeZ : z;
+		z = z < mineZ ? mineZ : z;
 
 		out.x = x;
 		out.y = y;
@@ -302,7 +339,12 @@ export class Vector3 implements IClone {
 	 * @param	o 输出向量。
 	 */
 	static cross(a: Vector3, b: Vector3, o: Vector3): void {
-		var ax: number = a.x, ay: number = a.y, az: number = a.z, bx: number = b.x, by: number = b.y, bz: number = b.z;
+		var ax: number = a.x,
+			ay: number = a.y,
+			az: number = a.z,
+			bx: number = b.x,
+			by: number = b.y,
+			bz: number = b.z;
 		o.x = ay * bz - az * by;
 		o.y = az * bx - ax * bz;
 		o.z = ax * by - ay * bx;
@@ -315,7 +357,7 @@ export class Vector3 implements IClone {
 	 * @return   点积。
 	 */
 	static dot(a: Vector3, b: Vector3): number {
-		return (a.x * b.x) + (a.y * b.y) + (a.z * b.z);
+		return a.x * b.x + a.y * b.y + a.z * b.z;
 	}
 
 	/**
@@ -341,7 +383,7 @@ export class Vector3 implements IClone {
 	 * @param	y  Y轴坐标。
 	 * @param	z  Z轴坐标。
 	 */
-	constructor(x: number = 0, y: number = 0, z: number = 0, nativeElements: Float32Array = null/*[NATIVE]*/) {
+	constructor(x: number = 0, y: number = 0, z: number = 0, nativeElements: Float32Array = null /*[NATIVE]*/) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -375,7 +417,7 @@ export class Vector3 implements IClone {
 	 * @param	destObject 克隆源。
 	 */
 	cloneTo(destObject: any): void {
-		var destVector3: Vector3 = (<Vector3>destObject);
+		var destVector3: Vector3 = <Vector3>destObject;
 		destVector3.x = this.x;
 		destVector3.y = this.y;
 		destVector3.z = this.z;
@@ -403,8 +445,7 @@ export class Vector3 implements IClone {
 			(<any>this).elements[0] = this.x;
 			(<any>this).elements[1] = this.y;
 			(<any>this).elements[2] = this.z;
-		}
-		else {
+		} else {
 			(<any>this).elements = new Float32Array([this.x, this.y, this.z]);
 		}
 		Vector2.rewriteNumProperty(this, "x", 0);
@@ -412,4 +453,3 @@ export class Vector3 implements IClone {
 		Vector2.rewriteNumProperty(this, "z", 2);
 	}
 }
-

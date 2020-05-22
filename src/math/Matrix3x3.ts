@@ -1,14 +1,13 @@
 import { Vector3 } from "./Vector3";
 import { Vector2 } from "./Vector2";
 import { Matrix4 } from "./Matrix4x4";
-import { IClone } from "../core/IClone"
+import { IClone } from "../core/IClone";
 import { Quaternion } from "./Quaternion";
 
 /**
  * <code>Matrix3x3</code> 类用于创建3x3矩阵。
  */
 export class Matrix3 implements IClone {
-
 	/**默认矩阵,禁止修改*/
 	static DEFAULT: Matrix3 = new Matrix3();
 
@@ -42,15 +41,15 @@ export class Matrix3 implements IClone {
 		var xw: number = rotX * rotW;
 
 		var resultE: Float32Array = out.elements;
-		resultE[0] = 1.0 - (2.0 * (yy + zz));
+		resultE[0] = 1.0 - 2.0 * (yy + zz);
 		resultE[1] = 2.0 * (xy + zw);
 		resultE[2] = 2.0 * (zx - yw);
 		resultE[3] = 2.0 * (xy - zw);
-		resultE[4] = 1.0 - (2.0 * (zz + xx));
+		resultE[4] = 1.0 - 2.0 * (zz + xx);
 		resultE[5] = 2.0 * (yz + xw);
 		resultE[6] = 2.0 * (zx + yw);
 		resultE[7] = 2.0 * (yz - xw);
-		resultE[8] = 1.0 - (2.0 * (yy + xx));
+		resultE[8] = 1.0 - 2.0 * (yy + xx);
 	}
 
 	/**
@@ -79,7 +78,8 @@ export class Matrix3 implements IClone {
 	static createFromRotation(rad: number, out: Matrix3): void {
 		var e: Float32Array = out.elements;
 
-		var s: number = Math.sin(rad), c: number = Math.cos(rad);
+		var s: number = Math.sin(rad),
+			c: number = Math.cos(rad);
 
 		e[0] = c;
 		e[1] = s;
@@ -145,13 +145,25 @@ export class Matrix3 implements IClone {
 		var r: Float32Array = right.elements;
 		var e: Float32Array = out.elements;
 
-		var l11: number = l[0], l12: number = l[1], l13: number = l[2];
-		var l21: number = l[3], l22: number = l[4], l23: number = l[5];
-		var l31: number = l[6], l32: number = l[7], l33: number = l[8];
+		var l11: number = l[0],
+			l12: number = l[1],
+			l13: number = l[2];
+		var l21: number = l[3],
+			l22: number = l[4],
+			l23: number = l[5];
+		var l31: number = l[6],
+			l32: number = l[7],
+			l33: number = l[8];
 
-		var r11: number = r[0], r12: number = r[1], r13: number = r[2];
-		var r21: number = r[3], r22: number = r[4], r23: number = r[5];
-		var r31: number = r[6], r32: number = r[7], r33: number = r[8];
+		var r11: number = r[0],
+			r12: number = r[1],
+			r13: number = r[2];
+		var r21: number = r[3],
+			r22: number = r[4],
+			r23: number = r[5];
+		var r31: number = r[6],
+			r32: number = r[7],
+			r33: number = r[8];
 
 		e[0] = r11 * l11 + r12 * l21 + r13 * l31;
 		e[1] = r11 * l12 + r12 * l22 + r13 * r32;
@@ -173,7 +185,7 @@ export class Matrix3 implements IClone {
 	 * 创建一个 <code>Matrix3x3</code> 实例。
 	 */
 	constructor() {
-		var e: Float32Array = this.elements = new Float32Array(9);
+		var e: Float32Array = (this.elements = new Float32Array(9));
 		e[0] = 1;
 		e[1] = 0;
 		e[2] = 0;
@@ -192,9 +204,15 @@ export class Matrix3 implements IClone {
 	determinant(): number {
 		var f: Float32Array = this.elements;
 
-		var a00: number = f[0], a01: number = f[1], a02: number = f[2];
-		var a10: number = f[3], a11: number = f[4], a12: number = f[5];
-		var a20: number = f[6], a21: number = f[7], a22: number = f[8];
+		var a00: number = f[0],
+			a01: number = f[1],
+			a02: number = f[2];
+		var a10: number = f[3],
+			a11: number = f[4],
+			a12: number = f[5];
+		var a20: number = f[6],
+			a21: number = f[7],
+			a22: number = f[8];
 
 		return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
 	}
@@ -208,10 +226,17 @@ export class Matrix3 implements IClone {
 		var e: Float32Array = out.elements;
 		var f: Float32Array = this.elements;
 
-		var a00: number = f[0], a01: number = f[1], a02: number = f[2];
-		var a10: number = f[3], a11: number = f[4], a12: number = f[5];
-		var a20: number = f[6], a21: number = f[7], a22: number = f[8];
-		var x: number = trans.x, y: number = trans.y;
+		var a00: number = f[0],
+			a01: number = f[1],
+			a02: number = f[2];
+		var a10: number = f[3],
+			a11: number = f[4],
+			a12: number = f[5];
+		var a20: number = f[6],
+			a21: number = f[7],
+			a22: number = f[8];
+		var x: number = trans.x,
+			y: number = trans.y;
 
 		e[0] = a00;
 		e[1] = a01;
@@ -235,9 +260,15 @@ export class Matrix3 implements IClone {
 		var e: Float32Array = out.elements;
 		var f: Float32Array = this.elements;
 
-		var a00: number = f[0], a01: number = f[1], a02: number = f[2];
-		var a10: number = f[3], a11: number = f[4], a12: number = f[5];
-		var a20: number = f[6], a21: number = f[7], a22: number = f[8];
+		var a00: number = f[0],
+			a01: number = f[1],
+			a02: number = f[2];
+		var a10: number = f[3],
+			a11: number = f[4],
+			a12: number = f[5];
+		var a20: number = f[6],
+			a21: number = f[7],
+			a22: number = f[8];
 
 		var s: number = Math.sin(rad);
 		var c: number = Math.cos(rad);
@@ -264,7 +295,8 @@ export class Matrix3 implements IClone {
 		var e: Float32Array = out.elements;
 		var f: Float32Array = this.elements;
 
-		var x: number = scale.x, y: number = scale.y;
+		var x: number = scale.x,
+			y: number = scale.y;
 
 		e[0] = x * f[0];
 		e[1] = x * f[1];
@@ -287,9 +319,15 @@ export class Matrix3 implements IClone {
 		var e: Float32Array = out.elements;
 		var f: Float32Array = this.elements;
 
-		var a00: number = f[0], a01: number = f[1], a02: number = f[2];
-		var a10: number = f[3], a11: number = f[4], a12: number = f[5];
-		var a20: number = f[6], a21: number = f[7], a22: number = f[8];
+		var a00: number = f[0],
+			a01: number = f[1],
+			a02: number = f[2];
+		var a10: number = f[3],
+			a11: number = f[4],
+			a12: number = f[5];
+		var a20: number = f[6],
+			a21: number = f[7],
+			a22: number = f[8];
 
 		var b01: number = a22 * a11 - a12 * a21;
 		var b11: number = -a22 * a10 + a12 * a20;
@@ -323,7 +361,9 @@ export class Matrix3 implements IClone {
 		var f: Float32Array = this.elements;
 
 		if (out === this) {
-			var a01: number = f[1], a02: number = f[2], a12: number = f[5];
+			var a01: number = f[1],
+				a02: number = f[2],
+				a12: number = f[5];
 			e[1] = f[3];
 			e[2] = f[6];
 			e[3] = a01;
@@ -391,7 +431,7 @@ export class Matrix3 implements IClone {
 	 * @param	out    输出3x3矩阵
 	 */
 	static lookAt(eye: Vector3, target: Vector3, up: Vector3, out: Matrix3): void {
-		Vector3.subtract(eye, target, Matrix3._tempV30);//WebGL为右手坐标系统
+		Vector3.subtract(eye, target, Matrix3._tempV30); //WebGL为右手坐标系统
 		Vector3.normalize(Matrix3._tempV30, Matrix3._tempV30);
 
 		Vector3.cross(up, Matrix3._tempV30, Matrix3._tempV31);
@@ -417,4 +457,3 @@ export class Matrix3 implements IClone {
 		me[8] = v0.z;
 	}
 }
-

@@ -46,7 +46,9 @@ export class Viewport {
 	 */
 	project(source: Vector3, matrix: Matrix4, out: Vector4): void {
 		Vector3.transformV3ToV4(source, matrix, out);
-		var x: number = out.x, y: number = out.y, z: number = out.z;
+		var x: number = out.x,
+			y: number = out.y,
+			z: number = out.z;
 		var w: number = out.w;
 		if (w !== 1.0) {
 			x = x / w;
@@ -67,10 +69,10 @@ export class Viewport {
 	unprojectFromMat(source: Vector3, matrix: Matrix4, out: Vector3): void {
 		var matrixEleme: Float32Array = matrix.elements;
 
-		out.x = (((source.x - this.x) / this.width) * 2.0) - 1.0;
-		out.y = -((((source.y - this.y) / this.height) * 2.0) - 1.0);
+		out.x = ((source.x - this.x) / this.width) * 2.0 - 1.0;
+		out.y = -(((source.y - this.y) / this.height) * 2.0 - 1.0);
 		out.z = (source.z - this.minDepth) / (this.maxDepth - this.minDepth);
-		var a: number = (((out.x * matrixEleme[3]) + (out.y * matrixEleme[7])) + (out.z * matrixEleme[11])) + matrixEleme[15];
+		var a: number = out.x * matrixEleme[3] + out.y * matrixEleme[7] + out.z * matrixEleme[11] + matrixEleme[15];
 		Vector3.transformV3ToV3(out, matrix, out);
 		if (a !== 1.0) {
 			out.x = out.x / a;
@@ -88,9 +90,8 @@ export class Viewport {
 	 * @param   out 输出向量。
 	 */
 	unprojectFromWVP(source: Vector3, projection: Matrix4, view: Matrix4, world: Matrix4, out: Vector3): void {
-
 		Matrix4.multiply(projection, view, Viewport._tempMatrix4x4);
-		(world) && (Matrix4.multiply(Viewport._tempMatrix4x4, world, Viewport._tempMatrix4x4));
+		world && Matrix4.multiply(Viewport._tempMatrix4x4, world, Viewport._tempMatrix4x4);
 		Viewport._tempMatrix4x4.invert(Viewport._tempMatrix4x4);
 		this.unprojectFromMat(source, Viewport._tempMatrix4x4, out);
 	}
@@ -108,5 +109,3 @@ export class Viewport {
 		out.maxDepth = this.maxDepth;
 	}
 }
-
-

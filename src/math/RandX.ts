@@ -1,6 +1,6 @@
 /**
-	 * <code>Rand</code> 类用于通过128位整型种子创建随机数,算法来自:https://github.com/AndreasMadsen/xorshift。
-	 */
+ * <code>Rand</code> 类用于通过128位整型种子创建随机数,算法来自:https://github.com/AndreasMadsen/xorshift。
+ */
 export class RandX {
 	/**@internal */
 	private static _CONVERTION_BUFFER: DataView = new DataView(new ArrayBuffer(8));
@@ -22,8 +22,7 @@ export class RandX {
 	 * @param	seed  随机种子。
 	 */
 	constructor(seed: any[]) {
-		if (!(seed instanceof Array) || seed.length !== 4)
-			throw new Error('Rand:Seed must be an array with 4 numbers');
+		if (!(seed instanceof Array) || seed.length !== 4) throw new Error("Rand:Seed must be an array with 4 numbers");
 
 		this._state0U = seed[0] | 0;
 		this._state0L = seed[1] | 0;
@@ -37,13 +36,15 @@ export class RandX {
 	 */
 	randomint(): any[] {
 		// uint64_t s1 = s[0]
-		var s1U: number = this._state0U, s1L: number = this._state0L;
+		var s1U: number = this._state0U,
+			s1L: number = this._state0L;
 		// uint64_t s0 = s[1]
-		var s0U: number = this._state1U, s0L: number = this._state1L;
+		var s0U: number = this._state1U,
+			s0L: number = this._state1L;
 
 		// result = s0 + s1
 		var sumL: number = (s0L >>> 0) + (s1L >>> 0);
-		var resU: number = (s0U + s1U + (sumL / 2 >>> 31)) >>> 0;
+		var resU: number = (s0U + s1U + ((sumL / 2) >>> 31)) >>> 0;
 		var resL: number = sumL >>> 0;
 
 		// s[0] = s0
@@ -51,14 +52,16 @@ export class RandX {
 		this._state0L = s0L;
 
 		// - t1 = [0, 0]
-		var t1U: number = 0, t1L: number = 0;
+		var t1U: number = 0,
+			t1L: number = 0;
 		// - t2 = [0, 0]
-		var t2U: number = 0, t2L: number = 0;
+		var t2U: number = 0,
+			t2L: number = 0;
 
 		// s1 ^= s1 << 23;
 		// :: t1 = s1 << 23
 		var a1: number = 23;
-		var m1: number = 0xFFFFFFFF << (32 - a1);
+		var m1: number = 0xffffffff << (32 - a1);
 		t1U = (s1U << a1) | ((s1L & m1) >>> (32 - a1));
 		t1L = s1L << a1;
 		// :: s1 = s1 ^ t1
@@ -71,7 +74,7 @@ export class RandX {
 		t1L = s1L ^ s0L;
 		// :: t2 = s1 >> 18
 		var a2: number = 18;
-		var m2: number = 0xFFFFFFFF >>> (32 - a2);
+		var m2: number = 0xffffffff >>> (32 - a2);
 		t2U = s1U >>> a2;
 		t2L = (s1L >>> a2) | ((s1U & m2) << (32 - a2));
 		// :: t1 = t1 ^ t2
@@ -79,7 +82,7 @@ export class RandX {
 		t1L = t1L ^ t2L;
 		// :: t2 = s0 >> 5
 		var a3: number = 5;
-		var m3: number = 0xFFFFFFFF >>> (32 - a3);
+		var m3: number = 0xffffffff >>> (32 - a3);
 		t2U = s0U >>> a3;
 		t2L = (s0L >>> a3) | ((s0U & m3) << (32 - a3));
 		// :: t1 = t1 ^ t2
@@ -105,12 +108,12 @@ export class RandX {
 		var t2L: number = t2[1];
 
 		// :: e = UINT64_C(0x3FF) << 52
-		var eU: number = 0x3FF << (52 - 32);
+		var eU: number = 0x3ff << (52 - 32);
 		var eL: number = 0;
 
 		// :: s = t2 >> 12
 		var a1: number = 12;
-		var m1: number = 0xFFFFFFFF >>> (32 - a1);
+		var m1: number = 0xffffffff >>> (32 - a1);
 		var sU: number = t2U >>> a1;
 		var sL: number = (t2L >>> a1) | ((t2U & m1) << (32 - a1));
 
@@ -127,5 +130,3 @@ export class RandX {
 		return d - 1;
 	}
 }
-
-

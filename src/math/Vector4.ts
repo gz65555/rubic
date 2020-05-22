@@ -1,13 +1,12 @@
 import { Matrix4 } from "./Matrix4x4";
 import { MathUtils3D } from "./MathUtils3D";
 import { Vector2 } from "./Vector2";
-import { IClone } from "../core/IClone"
+import { IClone } from "../core/IClone";
 
 /**
  * <code>Vector4</code> 类用于创建四维向量。
  */
 export class Vector4 implements IClone {
-
 	/**零向量，禁止修改*/
 	static ZERO: Vector4 = new Vector4();
 
@@ -80,7 +79,7 @@ export class Vector4 implements IClone {
 	 * @param	destObject 克隆源。
 	 */
 	cloneTo(destObject: any): void {
-		var destVector4: Vector4 = (<Vector4>destObject);
+		var destVector4: Vector4 = <Vector4>destObject;
 		destVector4.x = this.x;
 		destVector4.y = this.y;
 		destVector4.z = this.z;
@@ -105,7 +104,10 @@ export class Vector4 implements IClone {
 	 * @param	out 输出向量。
 	 */
 	static lerp(a: Vector4, b: Vector4, t: number, out: Vector4): void {
-		var ax: number = a.x, ay: number = a.y, az: number = a.z, aw: number = a.w;
+		var ax: number = a.x,
+			ay: number = a.y,
+			az: number = a.z,
+			aw: number = a.w;
 		out.x = ax + t * (b.x - ax);
 		out.y = ay + t * (b.y - ay);
 		out.z = az + t * (b.z - az);
@@ -139,7 +141,12 @@ export class Vector4 implements IClone {
 	 * @return  是否相等。
 	 */
 	static equals(a: Vector4, b: Vector4): boolean {
-		return MathUtils3D.nearEqual(Math.abs(a.x), Math.abs(b.x)) && MathUtils3D.nearEqual(Math.abs(a.y), Math.abs(b.y)) && MathUtils3D.nearEqual(Math.abs(a.z), Math.abs(b.z)) && MathUtils3D.nearEqual(Math.abs(a.w), Math.abs(b.w));
+		return (
+			MathUtils3D.nearEqual(Math.abs(a.x), Math.abs(b.x)) &&
+			MathUtils3D.nearEqual(Math.abs(a.y), Math.abs(b.y)) &&
+			MathUtils3D.nearEqual(Math.abs(a.z), Math.abs(b.z)) &&
+			MathUtils3D.nearEqual(Math.abs(a.w), Math.abs(b.w))
+		);
 	}
 
 	/**
@@ -155,7 +162,6 @@ export class Vector4 implements IClone {
 	 * @return  长度的平方。
 	 */
 	lengthSquared(): number {
-
 		return this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
 	}
 
@@ -250,17 +256,17 @@ export class Vector4 implements IClone {
 		var maxeZ: number = max.z;
 		var maxeW: number = max.w;
 
-		x = (x > maxeX) ? maxeX : x;
-		x = (x < mineX) ? mineX : x;
+		x = x > maxeX ? maxeX : x;
+		x = x < mineX ? mineX : x;
 
-		y = (y > maxeY) ? maxeY : y;
-		y = (y < mineY) ? mineY : y;
+		y = y > maxeY ? maxeY : y;
+		y = y < mineY ? mineY : y;
 
-		z = (z > maxeZ) ? maxeZ : z;
-		z = (z < mineZ) ? mineZ : z;
+		z = z > maxeZ ? maxeZ : z;
+		z = z < mineZ ? mineZ : z;
 
-		w = (w > maxeW) ? maxeW : w;
-		w = (w < mineW) ? mineW : w;
+		w = w > maxeW ? maxeW : w;
+		w = w < mineW ? mineW : w;
 
 		out.x = x;
 		out.y = y;
@@ -280,7 +286,7 @@ export class Vector4 implements IClone {
 		var z: number = value1.z - value2.z;
 		var w: number = value1.w - value2.w;
 
-		return (x * x) + (y * y) + (z * z) + (w * w);
+		return x * x + y * y + z * z + w * w;
 	}
 
 	/**
@@ -295,7 +301,7 @@ export class Vector4 implements IClone {
 		var z: number = value1.z - value2.z;
 		var w: number = value1.w - value2.w;
 
-		return Math.sqrt((x * x) + (y * y) + (z * z) + (w * w));
+		return Math.sqrt(x * x + y * y + z * z + w * w);
 	}
 
 	/**
@@ -305,7 +311,7 @@ export class Vector4 implements IClone {
 	 * @return  点积。
 	 */
 	static dot(a: Vector4, b: Vector4): number {
-		return (a.x * b.x) + (a.y * b.y) + (a.z * b.z) + (a.w * b.w);
+		return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
 	}
 
 	/**
@@ -334,25 +340,20 @@ export class Vector4 implements IClone {
 		out.w = Math.max(a.w, b.w);
 	}
 
-	forNativeElement(nativeElements: Float32Array = null): void//[NATIVE_TS]
-	{
-
+	forNativeElement(nativeElements: Float32Array = null): void {
+		//[NATIVE_TS]
 		if (nativeElements) {
 			(<any>this).elements = nativeElements;
 			(<any>this).elements[0] = this.x;
 			(<any>this).elements[1] = this.y;
 			(<any>this).elements[2] = this.z;
 			(<any>this).elements[3] = this.w;
-		}
-		else {
+		} else {
 			(<any>this).elements = new Float32Array([this.x, this.y, this.z, this.w]);
 		}
 		Vector2.rewriteNumProperty(this, "x", 0);
 		Vector2.rewriteNumProperty(this, "y", 1);
 		Vector2.rewriteNumProperty(this, "z", 2);
 		Vector2.rewriteNumProperty(this, "w", 3);
-
 	}
-
 }
-

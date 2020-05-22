@@ -1,4 +1,4 @@
-import { IClone } from "../core/IClone"
+import { IClone } from "../core/IClone";
 
 /**
  * <code>Vector2</code> 类用于创建二维向量。
@@ -59,7 +59,7 @@ export class Vector2 implements IClone {
 	 * @param	destObject 克隆源。
 	 */
 	cloneTo(destObject: any): void {
-		var destVector2: Vector2 = (<Vector2>destObject);
+		var destVector2: Vector2 = <Vector2>destObject;
 		destVector2.x = this.x;
 		destVector2.y = this.y;
 	}
@@ -71,7 +71,7 @@ export class Vector2 implements IClone {
 	 * @return   点积。
 	 */
 	static dot(a: Vector2, b: Vector2): number {
-		return (a.x * b.x) + (a.y * b.y);
+		return a.x * b.x + a.y * b.y;
 	}
 
 	/**
@@ -80,7 +80,8 @@ export class Vector2 implements IClone {
 	 * @param	out 输出三维向量。
 	 */
 	static normalize(s: Vector2, out: Vector2): void {
-		var x: number = s.x, y: number = s.y;
+		var x: number = s.x,
+			y: number = s.y;
 		var len: number = x * x + y * y;
 		if (len > 0) {
 			len = 1 / Math.sqrt(len);
@@ -95,7 +96,8 @@ export class Vector2 implements IClone {
 	 * @return 标量长度。
 	 */
 	static scalarLength(a: Vector2): number {
-		var x: number = a.x, y: number = a.y;
+		var x: number = a.x,
+			y: number = a.y;
 		return Math.sqrt(x * x + y * y);
 	}
 
@@ -109,14 +111,13 @@ export class Vector2 implements IClone {
 		return destVector2;
 	}
 
-	forNativeElement(nativeElements: Float32Array = null): void//[NATIVE_TS]
-	{
+	forNativeElement(nativeElements: Float32Array = null): void {
+		//[NATIVE_TS]
 		if (nativeElements) {
 			(<any>this).elements = nativeElements;
 			(<any>this).elements[0] = this.x;
 			(<any>this).elements[1] = this.y;
-		}
-		else {
+		} else {
 			(<any>this).elements = new Float32Array([this.x, this.y]);
 		}
 		Vector2.rewriteNumProperty(this, "x", 0);
@@ -125,14 +126,12 @@ export class Vector2 implements IClone {
 
 	static rewriteNumProperty(proto: any, name: string, index: number): void {
 		Object["defineProperty"](proto, name, {
-			"get": function (): any {
+			get: function(): any {
 				return this.elements[index];
 			},
-			"set": function (v: any): void {
+			set: function(v: any): void {
 				this.elements[index] = v;
-			}
+			},
 		});
 	}
-
 }
-

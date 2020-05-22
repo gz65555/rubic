@@ -1,6 +1,6 @@
 /**
-	 * <code>Rand</code> 类用于通过32位无符号整型随机种子创建随机数。
-	 */
+ * <code>Rand</code> 类用于通过32位无符号整型随机种子创建随机数。
+ */
 export class Rand {
 	/**
 	 * 通过无符号32位整形，获取32位浮点随机数。
@@ -9,7 +9,7 @@ export class Rand {
 	 */
 	static getFloatFromInt(v: number): number {
 		// take 23 bits of integer, and divide by 2^23-1
-		return (v & 0x007FFFFF) * (1.0 / 8388607.0)
+		return (v & 0x007fffff) * (1.0 / 8388607.0);
 	}
 
 	/**
@@ -17,9 +17,10 @@ export class Rand {
 	 * @param 无符号32位整形随机数。
 	 * @return 无符号8位字节随机数。
 	 */
-	static getByteFromInt(v: number): number {//TODO：待验证函数
+	static getByteFromInt(v: number): number {
+		//TODO：待验证函数
 		// take the most significant byte from the 23-bit value
-		return (v & 0x007FFFFF) >>> 15/*(23-8)*/;
+		return (v & 0x007fffff) >>> 15 /*(23-8)*/;
 	}
 
 	/**@internal */
@@ -42,9 +43,9 @@ export class Rand {
 	 */
 	set seed(seed: number) {
 		this.seeds[0] = seed;
-		this.seeds[1] = this.seeds[0] * 0x6C078965/*1812433253U*/ + 1;
-		this.seeds[2] = this.seeds[1] * 0x6C078965/*1812433253U*/ + 1;
-		this.seeds[3] = this.seeds[2] * 0x6C078965/*1812433253U*/ + 1;
+		this.seeds[1] = this.seeds[0] * 0x6c078965 /*1812433253U*/ + 1;
+		this.seeds[2] = this.seeds[1] * 0x6c078965 /*1812433253U*/ + 1;
+		this.seeds[3] = this.seeds[2] * 0x6c078965 /*1812433253U*/ + 1;
 	}
 
 	/**
@@ -53,9 +54,9 @@ export class Rand {
 	 */
 	constructor(seed: number) {
 		this.seeds[0] = seed;
-		this.seeds[1] = this.seeds[0] * 0x6C078965/*1812433253U*/ + 1;
-		this.seeds[2] = this.seeds[1] * 0x6C078965/*1812433253U*/ + 1;
-		this.seeds[3] = this.seeds[2] * 0x6C078965/*1812433253U*/ + 1;
+		this.seeds[1] = this.seeds[0] * 0x6c078965 /*1812433253U*/ + 1;
+		this.seeds[2] = this.seeds[1] * 0x6c078965 /*1812433253U*/ + 1;
+		this.seeds[3] = this.seeds[2] * 0x6c078965 /*1812433253U*/ + 1;
 	}
 
 	/**
@@ -67,7 +68,7 @@ export class Rand {
 		this.seeds[0] = this.seeds[1];
 		this.seeds[1] = this.seeds[2];
 		this.seeds[2] = this.seeds[3];
-		this.seeds[3] = (this.seeds[3] ^ (this.seeds[3] >>> 19)) ^ (this._temp[0] ^ (this._temp[0] >>> 8));
+		this.seeds[3] = this.seeds[3] ^ (this.seeds[3] >>> 19) ^ (this._temp[0] ^ (this._temp[0] >>> 8));
 		return this.seeds[3];
 	}
 
@@ -77,7 +78,7 @@ export class Rand {
 	 */
 	getFloat(): number {
 		this.getUint();
-		return (this.seeds[3] & 0x007FFFFF) * (1.0 / 8388607.0);
+		return (this.seeds[3] & 0x007fffff) * (1.0 / 8388607.0);
 	}
 
 	/**
@@ -87,6 +88,4 @@ export class Rand {
 	getSignedFloat(): number {
 		return this.getFloat() * 2.0 - 1.0;
 	}
-
 }
-
