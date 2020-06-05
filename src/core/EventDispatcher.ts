@@ -44,7 +44,7 @@ export class EventDispatcher {
 
 	public readonly off = this.removeEventListener;
 
-	public readonly removeAll = (eventName?: string) => {
+	public readonly removeAllListeners = (eventName?: string) => {
 		if (!eventName) {
 			this.listeners = {};
 		} else {

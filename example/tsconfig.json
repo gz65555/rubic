@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "module": "esnext",
     "target": "esnext",
-    "declaration": true,
+    "module": "esnext",
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "experimentalDecorators": true,
-    "sourceMap": true,
+    "importHelpers": true,
     "jsx": "react",
-    "declarationDir": "types"
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "baseUrl": "./",
+    "strict": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@@/*": ["src/.umi/*"]
+    },
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "pages/**/*"
+    "mock/**/*",
+    "src/**/*",
+    "config/**/*",
+    ".umirc.ts",
+    "typings.d.ts"
   ]
 }
